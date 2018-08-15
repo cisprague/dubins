@@ -201,12 +201,12 @@ if __name__ == "__main__":
     for ob in car.obs:
         ax.add_patch(plt.Circle((ob[0], ob[1]), ob[2], edgecolor="k", facecolor="gray"))
     ax.plot(xl, yl, "k-")
-    #fig.savefig("traj.png", bbox_inches="tight")
+    fig.savefig("traj.png", bbox_inches="tight")
 
     fig, ax = plt.subplots(1)
     ax.plot(tl, ul, "k-")
     ax.set_xlabel(r"$t$ [s]")
     ax.set_ylabel(r"$\phi$ [rad]")
-    #fig.savefig("controls.png", bbox_inches="tight")
+    fig.savefig("controls.png", bbox_inches="tight")
     plt.show()
     '''
