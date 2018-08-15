@@ -101,6 +101,16 @@ class Car(object):
                 # record time
                 tl.append(tl[-1] + self.dt)
 
+                # break if safe or done
+                if not self._environment.safe(xn, yn):
+                    term = True
+                    break
+                else:
+                    term = False
+
+            if term == True:
+                break
+
         # extend last control to signify constant value between times
         ul.append(ul[-1])
 

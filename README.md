@@ -38,9 +38,13 @@ python3 solution.py
 
 ## Guidance
 
-In case you're looking for some inspiration or are confused, you may take a look in the directory `examples/` for some ...uhh... examples, which are alterations of the aforementioned `solution.py` file.
-
+In case you're looking for some inspiration or are confused, you may take a look in the directory `examples/` for some ...uhh... examples, which are alterations of the aforementioned `solution.py` file. <br>
 If you're having trouble with the technicalities of the code, refer to the API documentation below. When in doubt, read the docs.
+
+The first example, `solution_dynamic_window.py`, is, as the file name suggests, an example solution illustrating the implementation of [The Dynamic Window Approach to Collision Avoidance, Fox et al.](https://www.ri.cmu.edu/pub_files/pub1/fox_dieter_1997_1/fox_dieter_1997_1.pdf), one of the simplest robotic planning methods. This method, at every moment in time, computes sample trajectories over the set of controls for a prescribed duration; the control whose trajectory minimises a prescribed cost is chosen. The result of this sample solution satisfies the first two tasks, i.e. arriving at the target; it looks like this:
+
+![](examples/traj_dynamic_window.png)
+![](examples/controls_dynamic_window.png)
 
 ## API
 
