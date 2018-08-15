@@ -5,9 +5,17 @@ from dubins import Car
 
 ''' <<< write your code below >>> '''
 
+# Dynamics window planning;
+# among the simplest of methods.
+
 from math import pi
 
 def predict(car, x, y, theta, phi, T):
+
+    '''
+    Returns the trajectory of the Dubin's car with the steering angle
+    phi for duration T, from a given state (x, y, theta).
+    '''
 
     # seed time
     t = 0
@@ -33,7 +41,12 @@ def predict(car, x, y, theta, phi, T):
 
 def obstacle_cost(car, xl, yl):
 
-    # closest distance
+    '''
+    Returns cost related to the trajectory's proximity to obstacles.
+    Minimising this cost will result in minimising proximity to obstacles.
+    '''
+
+    # minimum distance
     dmin = float("inf")
 
     # iterate through each state
@@ -45,17 +58,21 @@ def obstacle_cost(car, xl, yl):
             yr = ob[1] - y
             # distance to obstacle
             d = (xr**2 + yr**2)**0.5
-            # if colliding
-            if d <= ob[2]:
+            # if colliding with obstacle
+            if d <= ob[2] + 0.3:
                 return float("inf")
-            # if distance is smaller
             elif d < dmin:
                 dmin = d
 
-    # return cost
+    # if there wasn't a collision
     return 1.0/dmin
 
 def target_cost(car, x, y, theta):
+
+    '''
+    Returns cost related to a point's proximity to the target.
+    Minimsing this cost will minimise distance to target.
+    '''
 
     # relative position to target
     x = car.xt - x
@@ -72,50 +89,35 @@ def boundary_cost(car, xl, yl):
     # closest distance
     dmin = float("inf")
 
-    # iterate through each state
+    # iterate through states
     for x, y in zip(xl, yl):
-        # distance to north wall
-        dn = car.yub - y
-        # distance to east wall
-        de = car.xlb - x
-        # distance to south wall
-        ds = car.ylb - y
-        # distance to west wall
-        dw = car.xub - x
-        # minimum distance
-        d = min(abs(dn), abs(de), abs(ds), abs(dw))
-        if dn < 0 or de < 0 or ds > 0 or dw > 0:
+        if x < car.xlb or y > car.yub  or y < car.ylb:
             return float("inf")
-        elif d < dmin:
-            dmin = d
 
-    # return cost
-    return 1.0/dmin
+    # if no obstacles were encountered
+    return 0.0
 
-def control(car, x, y, theta):
+def control(car, x, y, theta, T):
 
     # best cost)
     costmin = float("inf")
 
-    # number of steering angles to test
-    nphi = 20
-    # steering angle increment
-    dphi = pi*0.5/nphi
-    # iterate through all steering angles
-    for phi in [-pi*0.25 + dphi*(i) for i in range(nphi + 1)]:
+    # Dubin's proved, through Pontryagin's maximum principle, that
+    # the optimal steering angle is one the extreme or zero.
+    for phi in [-pi/4.0, 0.0, pi/4.0]:
 
         # predict trajectory
-        xl, yl, thetal, phil, tl = predict(car, x, y, theta, phi, 0.2)
+        xl, yl, thetal, phil, tl = predict(car, x, y, theta, phi, T)
 
         # compute cost
-        cost1 = obstacle_cost(car, xl, yl)
-        cost2 = target_cost(car, xl[-1], yl[-1], thetal[-1])
+        cost1 = target_cost(car, xl[-1], yl[-1], thetal[-1])
+        cost2 = obstacle_cost(car, xl, yl)
         cost3 = boundary_cost(car, xl, yl)
-        cost = cost1 + cost2# + cost3
+        cost = cost1 + cost2 + cost3
 
         # record minimum cost
         if cost <= costmin:
-            costmin   = cost
+            costmin = cost
             xlmin     = xl
             ylmin     = yl
             thetalmin = thetal
@@ -133,20 +135,31 @@ def run(car):
     phil   = []
     tl     = [0]
 
-    # terminating conditions
+    safe, done = True, False
+    while safe and not done:
 
+        # best steering angle
+        xll, yll, thetall, phill, tll = control(car, xl[-1], yl[-1], thetal[-1], 1)
+        phi = phill[-1]
 
-    for i in range(1000):
+        # step with that control
+        x, y, theta = car.step(xl[-1], yl[-1], thetal[-1], phi)
+        print(x, y, theta)
 
-        # best trajectory
-        xll, yll, thetall, phill, tll = control(car, xl[-1], yl[-1], thetal[-1])
+        for ob in car.obs:
+            if ((ob[0]-x)**2 + (ob[1]-y)**2)**0.5 <= ob[2]:
+                safe = False
+                break
 
-        # record it
-        xl.extend(xll)
-        yl.extend(yll)
-        thetal.extend(thetall)
-        phil.extend(phill)
-        tl.extend([t + tl[-1] for t in tll])
+        if ((car.xt-x)**2 + (car.yt-y)**2)**0.5 <= 0.1:
+            done = True
+
+        # records states
+        xl.append(x)
+        yl.append(y)
+        thetal.append(theta)
+        phil.append(phi)
+        tl.append(tl[-1] + car.dt)
 
     # return lists
     return xl, yl, thetal, phil, tl
@@ -159,7 +172,7 @@ def solution():
 
     ''' <<< write your code below >>> '''
 
-    xl, yl, thetal, phil, tl = run(car)
+    pxl, yl, thetal, phil, tl = run(car)
     controls = phil
     times = tl
 
@@ -171,16 +184,4 @@ if __name__ == "__main__":
     # evaluate your code
     car, controls, times = solution()
     xl, yl, thetal, ul, tl, done = car.evaluate(controls, times)
-
-    import matplotlib.pyplot as plt
-    fig, ax = plt.subplots(1)
-    ax.plot(xl, yl, "k-")
-    ax.plot(car.x0, car.y0, 'kx')
-    ax.plot(car.xt, car.yt, 'kx')
-    for ob in car.obs:
-        ax.add_patch(plt.Circle((ob[0], ob[1]), ob[2], facecolor="gray", edgecolor="k"))
-
-    ax.set_aspect("equal")
-    ax.set_xlim(car.xlb, car.xub)
-    ax.set_ylim(car.ylb, car.yub)
-    plt.show()
+    print(done)

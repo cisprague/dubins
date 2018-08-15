@@ -26,7 +26,7 @@ We'll consider three tasks in order of difficulty:
  - Reach the position of the target
  - Reach the position of the target with zero heading angle
 
-Using the API, explained below, generate a sequence of steering angle commands `controls` and a sequence of times `times` between which the commands are executed that would yield a collision free and task fulfilling trajectory.
+Using the API, explained below, generate a sequence of steering angle commands `controls` and a sequence of times `times`, between which the commands are executed, that would yield a collision free and task fulfilling trajectory.
 
 ## Solution
 In the directory `solution/` you'll find a file named `solution.py`; in this file you should write your code in the sections indicated between `''' <<< write your code below >>> '''` and `''' <<< write your code above >>> '''`. If you feel the need, you may also add ancillary files to `solution/`.

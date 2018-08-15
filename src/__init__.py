@@ -7,24 +7,21 @@ from random import uniform
 class Car(object):
 
     '''
-    Drive a Dubin's car between initial and target states.
-    Level 0: match target x-position.
-    Level 1: match target (x,y)-position.
-    Level 2: match target (x,y)-position with theta=0
+    Dubin's car
     '''
 
     def __init__(self):
 
         # set environment
-        self._environment = Environment(50, 20)
+        self._environment = Environment(20, 10)
 
         # random initial position [m]
         self.x0 = float(0)
-        self.y0 = uniform(float(0), self._environment.ly)
+        self.y0 = uniform(self._environment.ly*0.2, self._environment.ly*0.8)
 
         # random target position [m]
         self.xt = self._environment.lx
-        self.yt = uniform(float(0), self._environment.ly)
+        self.yt = uniform(self._environment.ly*0.2, self._environment.ly*0.8)
 
         # time step size [s]
         self.dt = 0.01
@@ -78,7 +75,7 @@ class Car(object):
         elif any([times[i+1] - times[i] < self.dt-0.000001 for i in range(len(controls))]):
             raise ValueError("Difference in each time must be greater than 0.01 [s].")
 
-        # states and time lists
+        # states and time lists with initial configuration
         xl     = [self.x0]
         yl     = [self.y0]
         thetal = [0]
@@ -114,7 +111,7 @@ class Car(object):
         done = (
             True if abs(self.xt-xn) <= 0.1 else False,
             True if ((self.xt-xn)**2+(self.yt-yn)**2)**0.5 <= 0.1 else False,
-            True if ((self.xt-xn)**2+(self.yt-yn)**2)**0.5 <= 0.1 and thetan <= 0.05 else False
+            True if ((self.xt-xn)**2+(self.yt-yn)**2)**0.5 <= 0.1 and abs(thetan) <= 0.1 else False
         )
 
         # return states, controls, times, final saftey, and done
@@ -148,29 +145,27 @@ class Environment(object):
 
         # obstacle list
         self.obstacles = list()
-        # number of succesful obstacles
-        i = 0
         # number of unsuccesful obstacles
-        j = 0
+        first, i = True, 0
         # generate random obstacles
-        while i < 20 and j < 2000:
+        while i < 5000:
             # random radius
-            r = uniform(1, 2)
+            r = uniform(0.5, 0.9)
             # random position
             x = uniform(self.lx*0.2 + r, self.lx*0.8 - r)
             y = uniform(r, self.ly - r)
             # first obstacle
-            if i == 0:
+            if first:
                 self.obstacles.append(Obstacle(x, y, r))
-                i += 1
+                first = False
             # subsequent obstacles
             else:
                 # loop through prexisting obstacles
                 for ob in self.obstacles:
                     # compute distance to obstacle
                     d = ((x-ob.x)**2 + (y-ob.y)**2)**0.5
-                    # discard obstacle if not 1 [m] clearence
-                    if d < ob.r + r + 2:
+                    # discard obstacle if not 2 [m] clearence
+                    if d < ob.r + r + 1:
                         good = False
                         break
                     # keep testing if clearence is good
@@ -179,10 +174,10 @@ class Environment(object):
                 # if obstacle is acceptable
                 if good:
                     self.obstacles.append(Obstacle(x,y,r))
-                    i += 1
-                    j = 0
+                    i = 0
                 else:
-                    j += 1
+                    print(i)
+                    i += 1
                     continue
 
     def safe(self, x, y):
@@ -234,3 +229,15 @@ class Obstacle(object):
 
         # if intersecting obstacle
         return False if d <= self.r else True
+
+if __name__ == "__main__":
+
+    env = Environment(40, 20)
+    import matplotlib.pyplot as plt
+    fig, ax = plt.subplots(1)
+    ax.set_xlim(0, env.lx)
+    ax.set_ylim(0, env.ly)
+    ax.set_aspect('equal')
+    for ob in env.obstacles:
+        ax.add_patch(plt.Circle((ob.x, ob.y), ob.r, facecolor="gray", edgecolor="k"))
+    plt.show()

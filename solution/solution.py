@@ -1,5 +1,6 @@
-# Christopher Iliffe Sprague
-# sprague@kth.se
+# {student full name}
+# {student id}
+# {student email}
 
 from dubins import Car
 
@@ -15,10 +16,12 @@ def solution():
 
 
     ''' <<< write your code below >>> '''
+
     return car, controls, times
 
 if __name__ == "__main__":
 
     # evaluate your code
     car, controls, times = solution()
-    car.evaluate(controls, times)
+    xl, yl, thetal, ul, tl, done = car.evaluate(controls, times)
+    print(done)
