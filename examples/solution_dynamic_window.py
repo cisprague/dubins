@@ -187,3 +187,26 @@ if __name__ == "__main__":
     print("Level 1: ", "succesful" if done[0] else "unsuccesful")
     print("Level 2: ", "succesful" if done[1] else "unsuccesful")
     print("Level 3: ", "succesful" if done[2] else "unsuccesful")
+
+    '''
+    import matplotlib.pyplot as plt
+    fig, ax = plt.subplots(1)
+    ax.set_xlim(car.xlb, car.xub)
+    ax.set_ylim(car.ylb, car.yub)
+    ax.plot(car.xt, car.yt, "kx")
+    ax.plot(car.x0, car.y0, "kx")
+    ax.set_xlabel(r"$x$ [m]")
+    ax.set_ylabel(r"$y$ [m]")
+    ax.set_aspect('equal')
+    for ob in car.obs:
+        ax.add_patch(plt.Circle((ob[0], ob[1]), ob[2], edgecolor="k", facecolor="gray"))
+    ax.plot(xl, yl, "k-")
+    #fig.savefig("traj.png", bbox_inches="tight")
+
+    fig, ax = plt.subplots(1)
+    ax.plot(tl, ul, "k-")
+    ax.set_xlabel(r"$t$ [s]")
+    ax.set_ylabel(r"$\phi$ [rad]")
+    #fig.savefig("controls.png", bbox_inches="tight")
+    plt.show()
+    '''
