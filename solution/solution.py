@@ -9,8 +9,7 @@ from dubins import Car
 
 ''' <<< write your code below >>> '''
 
-def solution():
-    car = Car()
+def solution(car):
 
     ''' <<< write your code below >>> '''
 
@@ -21,9 +20,14 @@ def solution():
 
 if __name__ == "__main__":
 
+    # instantiate car object
+    car = Car()
+
     # evaluate your code
-    car, controls, times = solution()
-    xl, yl, thetal, ul, tl, done = car.evaluate(controls, times)
-    print("Level 1: ", "succesful" if done[0] else "unsuccesful")
-    print("Level 2: ", "succesful" if done[1] else "unsuccesful")
-    print("Level 3: ", "succesful" if done[2] else "unsuccesful")
+    car, controls, times = solution(car)
+    xl, yl, thetal, ul, tl, done = car.evaluate(controls, times, "E")
+    print("Grade E: ", "succesful" if done else "unsuccesful")
+    xl, yl, thetal, ul, tl, done = car.evaluate(controls, times, "C")
+    print("Grade C: ", "succesful" if done else "unsuccesful")
+    xl, yl, thetal, ul, tl, done = car.evaluate(controls, times, "A")
+    print("Grade D: ", "succesful" if done else "unsuccesful")

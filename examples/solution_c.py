@@ -167,8 +167,7 @@ def run(car):
 
 ''' <<< write your code below >>> '''
 
-def solution():
-    car = Car()
+def solution(car):
 
     ''' <<< write your code below >>> '''
 
@@ -181,14 +180,18 @@ def solution():
 
 if __name__ == "__main__":
 
-    # evaluate your code
-    car, controls, times = solution()
-    xl, yl, thetal, ul, tl, done = car.evaluate(controls, times)
-    print("Level 1: ", "succesful" if done[0] else "unsuccesful")
-    print("Level 2: ", "succesful" if done[1] else "unsuccesful")
-    print("Level 3: ", "succesful" if done[2] else "unsuccesful")
+    # instantiate car object
+    car = Car()
 
-    '''
+    # evaluate your code
+    car, controls, times = solution(car)
+    xl, yl, thetal, ul, tl, done = car.evaluate(controls, times, "E")
+    print("Grade E: ", "succesful" if done else "unsuccesful")
+    xl, yl, thetal, ul, tl, done = car.evaluate(controls, times, "C")
+    print("Grade C: ", "succesful" if done else "unsuccesful")
+    xl, yl, thetal, ul, tl, done = car.evaluate(controls, times, "A")
+    print("Grade D: ", "succesful" if done else "unsuccesful")
+
     import matplotlib.pyplot as plt
     fig, ax = plt.subplots(1)
     ax.set_xlim(car.xlb, car.xub)
@@ -209,4 +212,3 @@ if __name__ == "__main__":
     ax.set_ylabel(r"$\phi$ [rad]")
     fig.savefig("controls.png", bbox_inches="tight")
     plt.show()
-    '''
