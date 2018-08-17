@@ -181,50 +181,12 @@ def solution(car):
 if __name__ == "__main__":
 
     from dubins import evaluate
+    # random obstacles (student)
     car, xl, yl, thetal, ul, tl, done = evaluate(solution, "E", random=True)
     print(done)
-
-    """
-    import json
-    with open("../src/obstacles.json") as f:
-        data = json.load(f)
-
-
-    from dubins import evaluate
-    for i in range(len(data)):
-        xl, yl, thetal, ul, tl, done = evaluate(solution, "E")
-        print(done)
-
-    """
-
-    """
-    # evaluate your code
-    controls, times = solution(car)
-    xl, yl, thetal, ul, tl, done = car.evaluate(controls, times, "E")
-    print("Grade E: ", "succesful" if done else "unsuccesful")
-    xl, yl, thetal, ul, tl, done = car.evaluate(controls, times, "C")
-    print("Grade C: ", "succesful" if done else "unsuccesful")
-    xl, yl, thetal, ul, tl, done = car.evaluate(controls, times, "A")
-    print("Grade D: ", "succesful" if done else "unsuccesful")
-    """
-
-    import matplotlib.pyplot as plt
-    fig, ax = plt.subplots(1)
-    ax.set_xlim(car.xlb, car.xub)
-    ax.set_ylim(car.ylb, car.yub)
-    ax.plot(car.xt, car.yt, "kx")
-    ax.plot(car.x0, car.y0, "kx")
-    ax.set_xlabel(r"$x$ [m]")
-    ax.set_ylabel(r"$y$ [m]")
-    ax.set_aspect('equal')
-    for ob in car.obs:
-        ax.add_patch(plt.Circle((ob[0], ob[1]), ob[2], edgecolor="k", facecolor="gray"))
-    ax.plot(xl, yl, "k-")
-    fig.savefig("traj.png", bbox_inches="tight")
-
-    fig, ax = plt.subplots(1)
-    ax.plot(tl, ul, "k-")
-    ax.set_xlabel(r"$t$ [s]")
-    ax.set_ylabel(r"$\phi$ [rad]")
-    fig.savefig("controls.png", bbox_inches="tight")
-    plt.show()
+    # precomputed obstacle 1 (student)
+    car, xl, yl, thetal, ul, tl, done = evaluate(solution, "E", random=False)
+    print(done)
+    # provide obstacles (teacher)
+    car, xl, yl, thetal, ul, tl, done = evaluate(solution, "E", obs=[(5, 5, 1), (1.5, 1.5, 1)])
+    print(done)
