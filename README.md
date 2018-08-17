@@ -35,10 +35,9 @@ def solution(car):
   '''
   Din kod här
   '''
-  return car, controls, times
+  return controls, times
 ```
 , which receives a `Car` object `car` and returns a tuple containing,
- - `car : Car`: the received car object
  - `controls : list`: sequence of steering angles `controls[i] : float`
  - `times : list`: sequence of times at which the controls are executed `times[i] : float`
 
@@ -46,7 +45,7 @@ def solution(car):
 
 Your `solution` function should implement a robotic planning method, with the use of the attributes and methods of `Car`, to produce a sequence of steering angles and times at which they're executed, that would drive the car successfully in accordance to the previously detailed tasks.
 
-Note that obstacles, origin position, and target position are randomised upon initialisation of `Car`, so each received `car` is different.
+Note that obstacles, origin position, and target position are randomised upon initialisation of `Car`, so each `car` is different.
 
 ## Guidance
 

@@ -4,7 +4,7 @@
 from math import cos, sin, tan, pi, atan2
 from random import uniform
 
-def evaluate(solution_function):
+def evaluate(solution_function, grade):
 
     # initialise environment with non-random obstacles
     env = Environment(static=True)
@@ -13,10 +13,10 @@ def evaluate(solution_function):
     car = Car(env)
 
     # execute student's solution function
-    car, controls, times = solution_function(Car(env=Environment(static=True)))
+    controls, times = solution_function(car)
 
     # return state, control, and time lists, along with doneness
-    return car.evaluate(controls, times)
+    return car.evaluate(controls, times, grade)
 
 
 class Car(object):

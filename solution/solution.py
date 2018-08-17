@@ -16,7 +16,7 @@ def solution(car):
 
     ''' <<< write your code below >>> '''
 
-    return car, controls, times
+    return controls, times
 
 if __name__ == "__main__":
 
@@ -25,9 +25,11 @@ if __name__ == "__main__":
 
     # evaluate your code
     car, controls, times = solution(car)
+
+    # print results
     xl, yl, thetal, ul, tl, done = car.evaluate(controls, times, "E")
     print("Grade E: ", "succesful" if done else "unsuccesful")
     xl, yl, thetal, ul, tl, done = car.evaluate(controls, times, "C")
     print("Grade C: ", "succesful" if done else "unsuccesful")
     xl, yl, thetal, ul, tl, done = car.evaluate(controls, times, "A")
-    print("Grade D: ", "succesful" if done else "unsuccesful")
+    print("Grade A: ", "succesful" if done else "unsuccesful")
