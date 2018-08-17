@@ -11,40 +11,48 @@ sudo pip3 install .
 ```
 
 ## Description
-In this assignment you're tasked to implement a robotic planning method in order to drive a Dubin's car, with the following dynamics:
+In this assignment you're tasked to implement a robotic planning method in order to drive a Dubin's car, with the following dynamics,
 ```python
 dx     = cos(theta)
 dy     = sin(theta)
 dtheta = tan(phi)
 ```
-from an initial position `(x0,y0)` to a target position `(xt, yt)`, while avoiding both collisions with obstacles and venturing out of bounds.
+, from an initial position `(x0,y0)` to a target position `(xt, yt)`, while avoiding both collisions with obstacles and venturing out of bounds.
 
 ## Tasks
 
-We'll consider three tasks in order of difficulty:
- - Reach the x-position of the target
- - Reach the position of the target
- - Reach the position of the target with zero heading angle
+We'll consider three graded tasks in order of difficulty:
+ - **E**: Reach the target without obstacles.
+ - **C**: Reach the target with obstacles.
+ - **A**: Reach the target with obstacles, and with a final heading angle of zero.
 
 Using the API, explained below, generate a sequence of steering angle commands `controls` and a sequence of times `times`, between which the commands are executed, that would yield a collision free and task fulfilling trajectory.
 
 ## Solution
-In the directory `solution/` you'll find a file named `solution.py`; in this file you should write your code in the sections indicated between `''' <<< write your code below >>> '''` and `''' <<< write your code above >>> '''`. If you feel the need, you may also add ancillary files to `solution/`.
-
-The function `solution()`, within, is expected to return a tuple of the form (`car : Car, controls : list, times : times)`, which will be used to evaluate your implemented planning method's performance upon the execution of `solution.py`, i.e.:
-```bash
-python3 solution.py
+In the directory `solution/` you'll find a file named `solution.py`; in this file you should define the following function,
+```python
+def solution(car):
+  '''
+  Din kod här
+  '''
+  return car, controls, times
 ```
+, which receives a `Car` object `car` and returns a tuple containing,
+ - `car : Car`: the received car object
+ - `controls : list`: sequence of steering angles `controls[i] : float`
+ - `times : list`: sequence of times at which the controls are executed `times[i] : float`
+
+, where it should be noted that `controls[i]` is considered to be constant between `times[i]` and `times[i+1]`, hence `len(controls) == len(times) - 1`. If needed, you may add ancillary code outside `solution(car)` within the `solution.py` file or the `solution/`directory.
+
+Your `solution` function should implement a robotic planning method, with the use of the attributes and methods of `Car`, to produce a sequence of steering angles and times at which they're executed, that would drive the car successfully in accordance to the previously detailed tasks.
+
+Note that obstacles, origin position, and target position are randomised upon initialisation of `Car`, so each received `car` is different.
 
 ## Guidance
 
-In case you're looking for some inspiration or are confused, you may take a look in the directory `examples/` for some ...uhh... examples, which are alterations of the aforementioned `solution.py` file. <br>
+In case you're looking for some inspiration or are confused, you may take a look in the directory `examples/` for some a, which are alterations of the aforementioned `solution.py` file.
+
 If you're having trouble with the technicalities of the code, refer to the API documentation below. When in doubt, read the docs.
-
-The first example, `solution_dynamic_window.py`, is, as the file name suggests, an example solution illustrating the implementation of [The Dynamic Window Approach to Collision Avoidance, Fox et al.](https://www.ri.cmu.edu/pub_files/pub1/fox_dieter_1997_1/fox_dieter_1997_1.pdf), one of the simplest robotic planning methods. This method, at every moment in time, computes sample trajectories over the set of controls for a prescribed duration; the control whose trajectory minimises a prescribed cost is chosen. The result of this sample solution satisfies the first two tasks, i.e. arriving at the target; it looks like this:
-
-![](examples/traj_dynamic_window.png)
-![](examples/controls_dynamic_window.png)
 
 ## API
 
