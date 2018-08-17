@@ -29,23 +29,36 @@ We'll consider three graded tasks in order of difficulty:
 Using the API, explained below, generate a sequence of steering angle commands `controls` and a sequence of times `times`, between which the commands are executed, that would yield a collision free and task fulfilling trajectory.
 
 ## Solution
-In the directory `solution/` you'll find a file named `solution.py`; in this file you should define the following function,
+Create a file named `solution.py`,
 ```python
+# {student_full_name}
+# {student_id}
 def solution(car):
   '''
   Din kod här
   '''
   return controls, times
 ```
-, which receives a `Car` object `car` and returns a tuple containing,
+, which contains a function `solution` that receives a `Car` object `car` and returns a tuple containing,
  - `controls : list`: sequence of steering angles `controls[i] : float`
  - `times : list`: sequence of times at which the controls are executed `times[i] : float`
 
-, where it should be noted that `controls[i]` is considered to be constant between `times[i]` and `times[i+1]`, hence `len(controls) == len(times) - 1`. If needed, you may add ancillary code outside `solution(car)` within the `solution.py` file or the `solution/`directory.
+, where it should be noted that `controls[i]` is considered to be constant between `times[i]` and `times[i+1]`, hence `len(controls) == len(times) - 1`. If needed, you may add ancillary code outside `solution(car)` within the `solution.py` file.
 
 Your `solution` function should implement a robotic planning method, with the use of the attributes and methods of `Car`, to produce a sequence of steering angles and times at which they're executed, that would drive the car successfully in accordance to the previously detailed tasks.
 
 Note that obstacles, origin position, and target position are randomised upon initialisation of `Car`, so each `car` is different.
+
+You can evaluate your performance using the `evaluate` method of `Car` in the following way:
+
+```python
+from dubins import Car
+car = Car()
+control, times = solution(car)
+# grade in [E, C, A]
+xl, yl, thetal, ul, tl, done = car.evaluate(control, times, "A")
+print(done)
+```
 
 ## Guidance
 
@@ -89,9 +102,10 @@ and returns a tuple of the form `(xn, yn, thetan)`, containing:
  - `thetan : float`: new heading angle
 
 
-The second and last method of car, which will be used to grade your performance, is `evaluate(controls, times)`, which takes as its arguments:
+The second and last method of car, which will be used to grade your performance, is `evaluate(controls, times, grade)`, which takes as its arguments:
  - `controls : list`: sequence of controls `controls[i] : float`
  - `times : list`: sequence of times at which each control is taken `times[i] : float`
+ - `grade : str`: grade level of either E, C, or A (see Tasks)
 
 and returns a tuple of the form `(xl, yl, thetal, phil, tl, safe, done)` containing:
  - `xl : list`: sequence of x-positions `xl[i] : float`
@@ -99,10 +113,10 @@ and returns a tuple of the form `(xl, yl, thetal, phil, tl, safe, done)` contain
  - `thetal : list`: sequence of heading angles `thetal[i] : float`
  - `phil : list`: sequence of steering angles `phil[i] : float`
  - `tl : list`: sequence of times `tl[i] : float`
- - `done : tuple`: tuple of success values:
-   - `done[0] : bool`: `True` if final x-position is approximately at target x-position, `False` otherwise
-   - `done[1] : bool`: `True` if final position is approximately at target position
-   - `done[2] : bool`: `True` if final position is approximately at target position and heading angle is close to zero
+ - `done : bool`: success of trajectory for corresponding grade:
+   - `grade == "E"`: `True` if final x-position is approximately at target x-position, `False` otherwise
+   - `grade == "C"`: `True` if final position is approximately at target position
+   - `grade == "A"`: `True` if final position is approximately at target position and heading angle is close to zero
 
 Note that:
  - Each steering angle `controls[i]` is considered to be constant between `times[i]` and `times[i+1]`, so`controls` must be one element shorter than `times`, i.e. `len(controls) == len(times) - 1`.
