@@ -1,13 +1,9 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 # {student full name}
 # {student id}
 # {student email}
 
-from dubins import Car
-
-''' <<< write your code below >>> '''
-
-
-''' <<< write your code below >>> '''
 
 def solution(car):
 
@@ -20,16 +16,11 @@ def solution(car):
 
 if __name__ == "__main__":
 
-    # instantiate car object
-    car = Car()
+    from dubins import evaluate
 
-    # evaluate your code
-    car, controls, times = solution(car)
-
-    # print results
-    xl, yl, thetal, ul, tl, done = car.evaluate(controls, times, "E")
-    print("Grade E: ", "succesful" if done else "unsuccesful")
-    xl, yl, thetal, ul, tl, done = car.evaluate(controls, times, "C")
-    print("Grade C: ", "succesful" if done else "unsuccesful")
-    xl, yl, thetal, ul, tl, done = car.evaluate(controls, times, "A")
-    print("Grade A: ", "succesful" if done else "unsuccesful")
+    # evaluate solution without obstacles in precomputed environment
+    car, xl, yl, thetal, ul, tl, done = evaluate(solution, "E", obs=True)
+    # evaluate solution with obstacles in precomputed environment
+    car, xl, yl, thetal, ul, tl, done = evaluate(solution, "C", obs=True)
+    # evaluate solution with obstacles in random environment
+    car, xl, yl, thetal, ul, tl, done = evaluate(solution, "C")

@@ -4,10 +4,110 @@
 from math import cos, sin, tan, pi, atan2
 from random import uniform
 
-def evaluate(solution_function, grade):
+def evaluate(solution_function, grade, obs=None):
 
-    # initialise environment with non-random obstacles
-    env = Environment(static=True)
+    # if obs is True: precomputed obstacles used
+    # if obs is [(x, y, r), ... , (x, y, r)]: use that obstacle config
+    # if obs is None; use random obstacles
+
+    if obs is True:
+        obs = [
+        [
+            10.234897348278846,
+            7.426454970638634,
+            0.6036968449353223
+        ],
+        [
+            9.62360178529774,
+            3.5024934390492084,
+            0.640790030775506
+        ],
+        [
+            5.545792206236376,
+            3.1172535599361098,
+            0.5082665691945417
+        ],
+        [
+            12.934926733980326,
+            6.731061250216145,
+            0.5959879020760377
+        ],
+        [
+            8.670001702247484,
+            0.8983442377484021,
+            0.652618220438745
+        ],
+        [
+            15.07117247578524,
+            5.542943578444764,
+            0.5128733414030838
+        ],
+        [
+            5.161444180972378,
+            9.205934481925263,
+            0.5080914934599107
+        ],
+        [
+            13.453025054312407,
+            3.4000502649247615,
+            0.7522400709399546
+        ],
+        [
+            7.6621668116269674,
+            8.620628500804685,
+            0.7754175898925023
+        ],
+        [
+            5.459719078188462,
+            6.211824386849173,
+            0.6247372877261753
+        ],
+        [
+            14.542538486684606,
+            9.274980363181944,
+            0.6507933480043415
+        ],
+        [
+            15.171972300252216,
+            1.0064424626594783,
+            0.7452862888001911
+        ],
+        [
+            4.932792992444652,
+            0.883669003600472,
+            0.6876386432133378
+        ],
+        [
+            11.353164353829955,
+            0.752043219264199,
+            0.5315610243578464
+        ],
+        [
+            12.18303789861043,
+            8.993623583484608,
+            0.6404094018062996
+        ],
+        [
+            7.51339002828059,
+            4.370588682815919,
+            0.5287579124306581
+        ],
+        [
+            11.476995854637153,
+            4.941636225638853,
+            0.6015407536368719
+        ],
+        [
+            8.342699317665362,
+            6.312142803490614,
+            0.5550384214056028
+        ]
+        ]
+    else:
+        pass
+
+    # initialise environment
+    env = Environment(obs=obs)
 
     # initialise car with that environment
     car = Car(env)
@@ -15,8 +115,9 @@ def evaluate(solution_function, grade):
     # execute student's solution function
     controls, times = solution_function(car)
 
-    # return state, control, and time lists, along with doneness
-    return car.evaluate(controls, times, grade)
+    # return state, control, and time lists, along with doneness and car
+    xl, yl, thetal, ul, tl, done = car.evaluate(controls, times, grade)
+    return car, xl, yl, thetal, ul, tl, done
 
 
 class Car(object):
@@ -35,11 +136,11 @@ class Car(object):
 
         # random initial position [m]
         self.x0 = float(0)
-        self.y0 = uniform(self._environment.ly*0.2, self._environment.ly*0.8)
+        self.y0 = self._environment.ly*0.2
 
         # random target position [m]
         self.xt = self._environment.lx
-        self.yt = uniform(self._environment.ly*0.2, self._environment.ly*0.8)
+        self.yt = self._environment.ly*0.8
 
         # time step size [s]
         self.dt = 0.01
@@ -165,46 +266,21 @@ class Environment(object):
     within the rectangle.
     '''
 
-    def __init__(self, static=False):
+
+    def __init__(self, obs=None):
 
         # horizontal length
         self.lx  = float(20)
         # vertical length
         self.ly  = float(10)
-        # grading
-        if static:
-            self.static_obstacles()
-        # initialise obstacles
+
+        # if given obstacle list
+        if obs is not None:
+            self.obstacles = [Obstacle(*ob) for ob in obs]
+
+        # otherwise initialise obstacles randomly
         else:
             self.init_obstacles()
-
-    def static_obstacles(self):
-
-        # obstacles (x, y, r)
-        xyr = [
-            (9.04171271281707,   1.9271911363055318, 0.7137837905980843),
-            (14.84907899973128,  4.630260206468853,  0.6423293234264171),
-            (6.817542822242217,  4.01075837413714,   0.672704444726865 ),
-            (7.343910742259128,  8.744871479451902,  0.5184571088715749),
-            (14.494430975920748, 9.145654242269735,  0.6705858892897931),
-            (10.236457126137953, 8.675064781200511,  0.6878464659319687),
-            (11.537989018666813, 1.576169582576007,  0.6255341639413847),
-            (4.819744789035905,  1.4672518733985913, 0.742139163004419 ),
-            (4.719779913624635,  7.348174223848854,  0.5676719711424706),
-            (8.206381652304799,  6.287894928491917,  0.7888866679675341),
-            (14.13918384312909,  2.095848535090256,  0.7004377073903887),
-            (4.731084104774632,  5.026939570950342,  0.633763184590268 ),
-            (12.814150521971364, 6.957670581317933,  0.5678568860233869),
-            (11.793013445977131, 4.355559939468833,  0.5553529571338907),
-            (15.368765215214793, 6.932086094545404,  0.546487541545826 ),
-            (10.564329825426231, 6.0130274460901045, 0.5050711132562814),
-            (4.541424807625523,  9.475893771992098,  0.5105955198301957),
-            (9.4165156346914,    4.247951838436274,  0.5646356791454193),
-            (7.08713680373352,   0.6266893737309273, 0.5557241167556356)
-        ]
-
-        # assign obstacles
-        self.obstacles = [Obstacle(*ob) for ob in xyr]
 
     def init_obstacles(self):
 
@@ -246,7 +322,6 @@ class Environment(object):
                     self.obstacles.append(Obstacle(x,y,r))
                     i = 0
                 else:
-                    print(i)
                     i += 1
                     continue
 
@@ -312,14 +387,33 @@ class Obstacle(object):
 
 if __name__ == "__main__":
 
-    env = Environment(True)
-    import matplotlib.pyplot as plt
-    fig, ax = plt.subplots(1)
-    ax.set_xlim(0, env.lx)
-    ax.set_ylim(0, env.ly)
-    ax.set_aspect('equal')
-    for ob in env.obstacles:
-        ax.add_patch(plt.Circle((ob.x, ob.y), ob.r, facecolor="gray", edgecolor="k"))
-    plt.show()
+    """
+    obsl = list()
+    for i in range(8):
 
-    print([(ob.x, ob.y, ob.r) for ob in env.obstacles])
+        # initialise obstacles randomly
+        env = Environment()
+        obsl.append([(ob.x, ob.y, ob.r) for ob in env.obstacles])
+
+    import json
+
+    with open("obstacles.json", "w") as write_file:
+        json.dump(obsl, write_file, indent=4)
+    """
+
+    import json
+    with open("obstacles.json") as f:
+        data = json.load(f)
+
+
+    import matplotlib.pyplot as plt
+
+    for i in range(len(data)):
+        env = Environment(data[i])
+        fig, ax = plt.subplots(1)
+        ax.set_xlim(0, env.lx)
+        ax.set_ylim(0, env.ly)
+        ax.set_aspect('equal')
+        for ob in env.obstacles:
+            ax.add_patch(plt.Circle((ob.x, ob.y), ob.r, facecolor="gray", edgecolor="k"))
+    plt.show()

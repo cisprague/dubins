@@ -144,7 +144,7 @@ def run(car):
 
         # step with that control
         x, y, theta = car.step(xl[-1], yl[-1], thetal[-1], phi)
-        print("x", x, "y", y, "theta", theta)
+        #print("x", x, "y", y, "theta", theta)
 
         for ob in car.obs:
             if ((ob[0]-x)**2 + (ob[1]-y)**2)**0.5 <= ob[2]:
@@ -180,12 +180,22 @@ def solution(car):
 
 if __name__ == "__main__":
 
-    # instantiate car object
-    car = Car()
+    from dubins import evaluate
+    car, xl, yl, thetal, ul, tl, done = evaluate(solution, "E", obs=True)
+    print(done)
+
+    """
+    import json
+    with open("../src/obstacles.json") as f:
+        data = json.load(f)
+
 
     from dubins import evaluate
-    xl, yl, thetal, ul, tl, done = evaluate(solution, "C")
-    print(done)
+    for i in range(len(data)):
+        xl, yl, thetal, ul, tl, done = evaluate(solution, "E")
+        print(done)
+
+    """
 
     """
     # evaluate your code

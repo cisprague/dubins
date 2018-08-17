@@ -24,7 +24,7 @@ dtheta = tan(phi)
 We'll consider three graded tasks in order of difficulty:
  - **E**: Reach the target without obstacles.
  - **C**: Reach the target with obstacles.
- - **A**: Reach the target with obstacles, and with a final heading angle of zero.
+ - **A**: Reach the target with obstacles, and with a final heading angle of zero (optional).
 
 Using the API, explained below, generate a sequence of steering angle commands `controls` and a sequence of times `times`, between which the commands are executed, that would yield a collision free and task fulfilling trajectory.
 
@@ -39,7 +39,7 @@ def solution(car):
   '''
   return controls, times
 ```
-, which contains a function `solution` that receives a `Car` object `car` and returns a tuple containing,
+, containing a function `solution` that receives a `Car` object `car` and returns a tuple containing,
  - `controls : list`: sequence of steering angles `controls[i] : float`
  - `times : list`: sequence of times at which the controls are executed `times[i] : float`
 
@@ -49,22 +49,17 @@ Your `solution` function should implement a robotic planning method, with the us
 
 Note that obstacles, origin position, and target position are randomised upon initialisation of `Car`, so each `car` is different.
 
-You can evaluate your performance using the `evaluate` method of `Car` in the following way:
+You can evaluate your performance using the `evaluate` method of `Dubins` in the following way:
 
 ```python
-from dubins import Car
-car = Car()
-control, times = solution(car)
-# grade in [E, C, A]
-xl, yl, thetal, ul, tl, done = car.evaluate(control, times, "A")
-print(done)
+from dubins import evaluate
+# evaluate solution function at E level with precomputed obstacles (same as Kattis)
+xl, yl, thetal, ul, tl, done = evaluate(solution, "E", obs=True)
+print("Success?", done)
+# evaluate solution function at C level with random obstacles
+xl, yl, thetal, ul, tl, done = evaluate(solution, "c")
+print("Success?", done)
 ```
-
-## Guidance
-
-In case you're looking for some inspiration or are confused, you may take a look in the directory `examples/` for some a, which are alterations of the aforementioned `solution.py` file.
-
-If you're having trouble with the technicalities of the code, refer to the API documentation below. When in doubt, read the docs.
 
 ## API
 
@@ -114,7 +109,7 @@ and returns a tuple of the form `(xl, yl, thetal, phil, tl, safe, done)` contain
  - `phil : list`: sequence of steering angles `phil[i] : float`
  - `tl : list`: sequence of times `tl[i] : float`
  - `done : bool`: success of trajectory for corresponding grade:
-   - `grade == "E"`: `True` if final x-position is approximately at target x-position, `False` otherwise
+   - `grade == "E"`: `True` if final x-position is approximately at target x-position
    - `grade == "C"`: `True` if final position is approximately at target position
    - `grade == "A"`: `True` if final position is approximately at target position and heading angle is close to zero
 
