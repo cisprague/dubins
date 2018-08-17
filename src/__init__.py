@@ -4,13 +4,11 @@
 from math import cos, sin, tan, pi, atan2
 from random import uniform
 
-def evaluate(solution_function, grade, obs=None):
+def evaluate(solution_function, grade, random=False, obs=None):
 
-    # if obs is True: precomputed obstacles used
-    # if obs is [(x, y, r), ... , (x, y, r)]: use that obstacle config
-    # if obs is None; use random obstacles
-
-    if obs is True:
+    if obs is not None:
+        pass
+    elif not random:
         obs = [
         [
             10.234897348278846,
@@ -103,8 +101,8 @@ def evaluate(solution_function, grade, obs=None):
             0.5550384214056028
         ]
         ]
-    else:
-        pass
+    elif random:
+        obs=None
 
     # initialise environment
     env = Environment(obs=obs)

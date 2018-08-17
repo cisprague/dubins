@@ -31,8 +31,11 @@ Using the API, explained below, generate a sequence of steering angle commands `
 ## Solution
 Create a file named `solution.py`,
 ```python
-# {student_full_name}
-# {student_id}
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# {student full name}
+# {student id}
+# {student email}
 def solution(car):
   '''
   Din kod här
@@ -54,14 +57,16 @@ You can evaluate your performance using the `evaluate` method of `Dubins` in the
 ```python
 from dubins import evaluate
 # evaluate solution function at E level with precomputed obstacles (same as Kattis)
-xl, yl, thetal, ul, tl, done = evaluate(solution, "E", obs=True)
+xl, yl, thetal, ul, tl, done = evaluate(solution, "E", random=False)
 print("Success?", done)
 # evaluate solution function at C level with random obstacles
-xl, yl, thetal, ul, tl, done = evaluate(solution, "c")
+xl, yl, thetal, ul, tl, done = evaluate(solution, "C", random=True)
 print("Success?", done)
 ```
 
 ## API
+
+### Car
 
 In this assignment, we'll work exclusively with the `Car` object, which you can import and instantiate as follows:
 
@@ -96,13 +101,15 @@ and returns a tuple of the form `(xn, yn, thetan)`, containing:
  - `yn : float`: new y-position
  - `thetan : float`: new heading angle
 
+### Evaluate
 
-The second and last method of car, which will be used to grade your performance, is `evaluate(controls, times, grade)`, which takes as its arguments:
- - `controls : list`: sequence of controls `controls[i] : float`
- - `times : list`: sequence of times at which each control is taken `times[i] : float`
- - `grade : str`: grade level of either E, C, or A (see Tasks)
+The function which will be used to grade your performance, is `evaluate(solution_function, grade, obs)`, which takes as its arguments:
+ - `solution_function : callable`: your solution function
+ - `grade : str`: grade level at which to grade your function
+ - `random : bool`: use random obstacles if `True`, otherwise use precomputed obstacles from Kattis
 
 and returns a tuple of the form `(xl, yl, thetal, phil, tl, safe, done)` containing:
+ - `car : Car`: car object for which your solution function was evaluated
  - `xl : list`: sequence of x-positions `xl[i] : float`
  - `yl : list`: sequence of y-positions `yl[i] : float`
  - `thetal : list`: sequence of heading angles `thetal[i] : float`

@@ -181,7 +181,7 @@ def solution(car):
 if __name__ == "__main__":
 
     from dubins import evaluate
-    car, xl, yl, thetal, ul, tl, done = evaluate(solution, "E", obs=True)
+    car, xl, yl, thetal, ul, tl, done = evaluate(solution, "E", random=True)
     print(done)
 
     """
