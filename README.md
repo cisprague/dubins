@@ -103,7 +103,7 @@ and returns a tuple of the form `(xn, yn, thetan)`, containing:
 
 ### Evaluate
 
-The function which will be used to grade your performance, is `evaluate(solution_function, grade, obs)`, which takes as its arguments:
+The function which will be used to grade your performance, is `evaluate(solution_function, grade, random)`, which takes as its arguments:
  - `solution_function : callable`: your solution function
  - `grade : str`: grade level at which to grade your function
  - `random : bool`: use random obstacles if `True`, otherwise use precomputed obstacles from Kattis
