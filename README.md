@@ -6,8 +6,6 @@ Ensure that you have a working installation of python3, then run the following i
 git clone https://github.com/cisprague/dubins.git
 ```
 
-Then you may
-
 ## Description
 In this assignment you're tasked to implement a robotic planning method in order to drive a Dubin's car, with the following dynamics,
 ```python
