@@ -1,5 +1,14 @@
 # Dubin's Car
 
+## Installation
+Ensure that you have a working installation of python3, then run the following in a terminal to obtain the code:
+```bash
+git clone https://github.com/cisprague/dubins.git
+```
+
+Then you may
+
+## Description
 In this assignment you're tasked to implement a robotic planning method in order to drive a Dubin's car, with the following dynamics,
 ```python
 dx     = cos(theta)
@@ -48,23 +57,14 @@ Your `solution` function should implement a robotic planning method, with the us
 
 Note that obstacles, origin position, and target position are randomised upon initialisation of `Car`, so each `car` is different.
 
-You can evaluate your performance using the `evaluate` method of `dubins` in the following way:
+You can evaluate your performance using the `evaluate` method of `dubins` by running the following in a terminal to see how successful your solution is among the test cases:
+```
+python3 main.py
+```
 
-```python
-from dubins import evaluate
-
-# make it to target without obstacles in precomputed environment
-res = evaluate(solution, "E", random=False)
-
-# make it to target with obstacles in precomputed environment
-res = evaluate(solution, "C", random=False)
-
-# make it to target with obstacle in random environment
-res = evaluate(solution, "C")
-
-# make it to target with obstacle in random environment and zero
-# final heading angle
-res = evaluate(solution, "A")
+And if you wish to see a visualisation of the trajectory:
+```
+python3 main.py plot
 ```
 
 ## API
