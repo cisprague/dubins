@@ -4,7 +4,7 @@
 from math import cos, sin, tan, pi, atan2
 from random import uniform
 
-def evaluate(solution_function, grade, random=False, obs=None):
+def evaluate(solution_function, grade, random=True, obs=None, verbose=False):
 
     if obs is not None:
         pass
@@ -114,7 +114,7 @@ def evaluate(solution_function, grade, random=False, obs=None):
     controls, times = solution_function(car)
 
     # return state, control, and time lists, along with doneness and car
-    xl, yl, thetal, ul, tl, done = car.evaluate(controls, times, grade)
+    xl, yl, thetal, ul, tl, done = car.evaluate(controls, times, grade, verbose=verbose)
     return car, xl, yl, thetal, ul, tl, done
 
 
@@ -173,7 +173,7 @@ class Car(object):
 
         return xn, yn, thetan
 
-    def evaluate(self, controls, times, grade):
+    def evaluate(self, controls, times, grade, verbose=False):
 
         '''
         Returns a simulated final result, given a sequence of controls
@@ -210,6 +210,9 @@ class Car(object):
 
                 # get new state and time
                 xn, yn, thetan = self.step(xl[-1], yl[-1], thetal[-1], controls[i])
+
+                if verbose:
+                    print("x:", xn, "y:", yn, "theta:", thetan)
 
                 # record state
                 xl.append(xn)
@@ -382,36 +385,3 @@ class Obstacle(object):
 
         # if intersecting obstacle
         return False if d <= self.r else True
-
-if __name__ == "__main__":
-
-    """
-    obsl = list()
-    for i in range(8):
-
-        # initialise obstacles randomly
-        env = Environment()
-        obsl.append([(ob.x, ob.y, ob.r) for ob in env.obstacles])
-
-    import json
-
-    with open("obstacles.json", "w") as write_file:
-        json.dump(obsl, write_file, indent=4)
-    """
-
-    import json
-    with open("obstacles.json") as f:
-        data = json.load(f)
-
-
-    import matplotlib.pyplot as plt
-
-    for i in range(len(data)):
-        env = Environment(data[i])
-        fig, ax = plt.subplots(1)
-        ax.set_xlim(0, env.lx)
-        ax.set_ylim(0, env.ly)
-        ax.set_aspect('equal')
-        for ob in env.obstacles:
-            ax.add_patch(plt.Circle((ob.x, ob.y), ob.r, facecolor="gray", edgecolor="k"))
-    plt.show()
