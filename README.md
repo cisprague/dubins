@@ -1,16 +1,5 @@
 # Dubin's Car
 
-## Installation
-Ensure that you have working version of [Python 3](https://www.python.org/downloads/) and pip installed. <br>
-Execute the following in your terminal to download and install the code:
-
-```bash
-git clone https://github.com/cisprague/dubins.git
-cd dubins
-sudo pip3 install .
-```
-
-## Description
 In this assignment you're tasked to implement a robotic planning method in order to drive a Dubin's car, with the following dynamics,
 ```python
 dx     = cos(theta)
@@ -19,17 +8,24 @@ dtheta = tan(phi)
 ```
 , from an initial position `(x0,y0)` to a target position `(xt, yt)`, while avoiding both collisions with obstacles and venturing out of bounds.
 
+The state variables are:
+ - `x`: horizontal position
+ - `y`: vertical position
+ - `theta`: heading angle (direction of travel)
+
+And the sole control variable is the steering angle `phi ∈ [-pi/4, pi/4]`.
+
 ## Tasks
 
 We'll consider three graded tasks in order of difficulty:
  - **E**: Reach the target without obstacles.
  - **C**: Reach the target with obstacles.
- - **A**: Reach the target with obstacles, and with a final heading angle of zero (optional).
+ - **+**: Reach the target with obstacles, and with a final heading angle of zero.
 
-Using the API, explained below, generate a sequence of steering angle commands `controls` and a sequence of times `times`, between which the commands are executed, that would yield a collision free and task fulfilling trajectory.
+Using the API, explained below, generate a sequence of steering angle commands `controls` and a sequence of times `times`, between which the commands are executed, that would yield a collision free and task fulfilling trajectory. Note that grade **+** is completely optional and will not contribute to your grade, but interested students are encouraged to attempt it.
 
 ## Solution
-Create a file named `solution.py`,
+Submit a file named `solution.py`,
 ```python
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
@@ -52,16 +48,23 @@ Your `solution` function should implement a robotic planning method, with the us
 
 Note that obstacles, origin position, and target position are randomised upon initialisation of `Car`, so each `car` is different.
 
-You can evaluate your performance using the `evaluate` method of `Dubins` in the following way:
+You can evaluate your performance using the `evaluate` method of `dubins` in the following way:
 
 ```python
 from dubins import evaluate
-# evaluate solution function at E level with precomputed obstacles (same as Kattis)
-xl, yl, thetal, ul, tl, done = evaluate(solution, "E", random=False)
-print("Success?", done)
-# evaluate solution function at C level with random obstacles
-xl, yl, thetal, ul, tl, done = evaluate(solution, "C", random=True)
-print("Success?", done)
+
+# make it to target without obstacles in precomputed environment
+res = evaluate(solution, "E", random=False)
+
+# make it to target with obstacles in precomputed environment
+res = evaluate(solution, "C", random=False)
+
+# make it to target with obstacle in random environment
+res = evaluate(solution, "C")
+
+# make it to target with obstacle in random environment and zero
+# final heading angle
+res = evaluate(solution, "A")
 ```
 
 ## API
@@ -103,10 +106,11 @@ and returns a tuple of the form `(xn, yn, thetan)`, containing:
 
 ### Evaluate
 
-The function which will be used to grade your performance, is `evaluate(solution_function, grade, random)`, which takes as its arguments:
+The function which will be used to grade your performance, is `evaluate(solution_function, grade, random=True, verbose=False)`, which takes as its arguments:
  - `solution_function : callable`: your solution function
  - `grade : str`: grade level at which to grade your function
  - `random : bool`: use random obstacles if `True`, otherwise use precomputed obstacles from Kattis
+ - `verbose : bool`: toggles printing of dynamics integration
 
 and returns a tuple of the form `(xl, yl, thetal, phil, tl, safe, done)` containing:
  - `car : Car`: car object for which your solution function was evaluated
