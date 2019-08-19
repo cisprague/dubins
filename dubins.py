@@ -3,6 +3,7 @@
 
 from math import cos, sin, tan, pi
 from random import uniform
+import json
 
 def evaluate(solution_function, obs, verbose=False):
 
@@ -54,9 +55,8 @@ class Car(object):
 def step(car, x, y, theta, phi, dt=0.01):
 
     '''
-    Returns a new state (xn, yn, thetan), safety condition,
-    and done condition, given an initial state (x, y, theta)
-    and control phi.
+    Returns a new state (xn, yn, thetan), 
+    given an initial state (x, y, theta) and control phi.
     Numerical integration is done at a time step of dt [sec].
     '''
 
@@ -120,7 +120,7 @@ def car_evaluate(car, controls, times, verbose=False):
 
             # get safety and doneness
             safe = car._environment.safe(xn, yn)
-            done = True if ((car.xt-xn)**2 + (car.yt-yn)**2)**0.5 < 1 else False
+            done = True if ((car.xt-xn)**2 + (car.yt-yn)**2)**0.5 < 1.5 else False
 
             # terminate if safe or done
             if not safe:
@@ -270,3 +270,32 @@ class Obstacle(object):
 
         # if intersecting obstacle
         return False if d <= self.r else True
+
+def gen_random_obstacles(fname):
+
+    # arbitrary environment
+    env = Environment()
+
+    # list of obstacles
+    lo = list()
+
+    # generate obstacles
+    for i in range(6):
+
+        # generate
+        env.init_obstacles()
+
+        # add to the list
+        lo.append([
+            [o.x, o.y, o.r] for o in env.obstacles
+        ])
+
+    with open(fname, 'w') as f:
+        json.dump(lo, f, indent=4)
+
+
+
+
+if __name__ == "__main__":
+
+    gen_random_obstacles("new_obs.json", 6)
