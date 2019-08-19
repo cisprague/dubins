@@ -22,6 +22,8 @@ The state variables are:
 
 And the sole control variable is the steering angle `phi ∈ [-pi/4, pi/4]`.
 
+Side note: Pontryagin's maximum principle has shown that it is optimal to choose the extreme of the controls, i.e., `phi ∈ {-pi/4, 0, pi/4}`.
+
 ## Tasks
 
 We'll consider two graded tasks in order of difficulty:
@@ -62,6 +64,7 @@ Note that:
  - Each steering angle must be admissible, i.e. `-pi/4 <= controls[i] <= pi/4`.
  - The time sequence must increase, i.e. `times[i+1] > times[i]`.
  - The sequence time-step size must be less than 0.01, i.e. `times[i+1] - times[i] > 0.01`.
+ - The obstacles are randomised, so hard-coded solutions will not work.
 
 
 You can evaluate your solution by executing the following terminal command from within the dubins directory:
@@ -95,7 +98,6 @@ The `Car` object has several attributes which you may find useful, namely:
  - `y0 : float`: initial y-position [m]
  - `xt : float`: target x-position [m]
  - `yt : float`: target y-position [m]
- - `dt : float`: time-step size [s]
  - `xlb : float`: minimum x-position [m]
  - `xub : float`: maximum x-position [m]
  - `ylb : float`: minimum y-position [m]
