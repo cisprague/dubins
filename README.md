@@ -59,11 +59,10 @@ def solution(car):
 Your `solution` function should implement a robotic planning method, with the use of the attributes and methods of `Car`, to produce a sequence of steering angles and times at which they're executed, that would drive the car successfully in accordance to the previously detailed tasks.
 
 Note that:
- - Each steering angle `controls[i]` is considered to be constant between `times[i]` and `times[i+1]`, so`controls` must be one element shorter than `times`, i.e. `len(controls) == len(times) - 1`.
+ - Each steering angle `controls[i]` is considered to be constant between `times[i]` and `times[i+1]`, so `controls` must be one element shorter than `times`, i.e. `len(controls) == len(times) - 1`.
  - The initial time must be zeros, i.e. `times[0] == 0`.
  - Each steering angle must be admissible, i.e. `-pi/4 <= controls[i] <= pi/4`.
  - The time sequence must increase, i.e. `times[i+1] > times[i]`.
- - The sequence time-step size must be less than 0.01, i.e. `times[i+1] - times[i] > 0.01`.
  - The obstacles are randomised, so hard-coded solutions will not work.
 
 
@@ -117,3 +116,5 @@ and returns a tuple of the form `(xn, yn, thetan)`, containing:
  - `xn : float`: new x-position
  - `yn : float`: new y-position
  - `thetan : float`: new heading angle
+
+After computing the new state `xn, yn, thetan = step(x, y, theta, phi)`, check `car.obs` to see if the new state is within any obstacles, `(car.xlb, car.xub, car.ylb, car.yub)` to see if it is out of bounds, and `(car.xt, car.yt)` to see if it is close the the target state.
