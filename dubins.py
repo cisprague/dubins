@@ -4,6 +4,8 @@
 from math import cos, sin, tan, pi
 from random import uniform
 import json
+from random import uniform
+from copy import deepcopy
 
 def evaluate(solution_function, obs, verbose=False):
 
@@ -13,8 +15,22 @@ def evaluate(solution_function, obs, verbose=False):
     # initialise car with that environment
     car = Car(env)
 
+    # save the original car for cheating check
+    car0 = deepcopy(car)
+
     # execute student's solution function
     controls, times = solution_function(car)
+
+    # check for cheating
+    assert car.x0 == car0.x0
+    assert car.y0 == car0.y0
+    assert car.xt == car0.xt
+    assert car.yt == car0.yt
+    assert car.obs == car0.obs
+    assert car.xlb == car0.xlb
+    assert car.xub == car0.xub
+    assert car.ylb == car0.ylb
+    assert car.yub == car0.yub
 
     # return state, control, and time lists, along with doneness and car
     xl, yl, thetal, ul, tl, safe, done = car_evaluate(car, controls, times, verbose=verbose)
@@ -37,11 +53,19 @@ class Car(object):
 
         # random initial position [m]
         self.x0 = float(0)
-        self.y0 = self._environment.ly*0.2
+        # self.y0 = self._environment.ly*0.2
+        self.y0 = uniform(
+            self._environment.ly*0.1,
+            self._environment.ly*0.9
+        )
 
         # random target position [m]
         self.xt = self._environment.lx
-        self.yt = self._environment.ly*0.8
+        # self.yt = self._environment.ly*0.8
+        self.yt = uniform(
+            self._environment.ly*0.1, 
+            self._environment.ly*0.9
+        )
 
         # list of obstacles
         self.obs = [(ob.x, ob.y, ob.r) for ob in self._environment.obstacles]
@@ -80,6 +104,7 @@ def car_evaluate(car, controls, times, verbose=False):
     and times[i+1].
     '''
 
+    # check validity of returned values
     if len(controls) != len(times) - 1:
         raise ValueError("Control sequence length must be 1 less than times.")
     elif times[0] != 0:
@@ -92,9 +117,9 @@ def car_evaluate(car, controls, times, verbose=False):
     # states and time lists with initial configuration
     xl     = [car.x0]
     yl     = [car.y0]
-    thetal = [0]
+    thetal = [0.0]
     ul     = []
-    tl     = [0]
+    tl     = [0.0]
 
     for i in range(len(controls)):
 
