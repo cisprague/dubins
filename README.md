@@ -1,13 +1,9 @@
 # Dubin's Car
 
-## Useful resource for planning algorithms
- - [PythonRobotics](https://github.com/AtsushiSakai/PythonRobotics#path-planning)
+## Useful resources
+ - [PythonRobotics](https://github.com/AtsushiSakai/PythonRobotics#path-planning) for planning algorithms,
+ - [demo.ipynb](demo.ipynb) for this assignment's introduction.
 
-## Installation
-After ensuring that you have a working version of Python 3 and Git, you can obtain the source code by cloning this repository as so:
-```bash
-git clone https://github.com/cisprague/dubins.git
-```
 
 ## Description
 In this assignment you're tasked to implement a robotic planning method in order to drive a Dubins car, with the dynamics
@@ -95,7 +91,7 @@ This state path is judged on whether it avoided obstacles and made it to the tar
 **Note**:
  - each steering angle `controls[i]` is considered to be constant between `times[i]` and `times[i+1]`, so `controls` must be one element shorter than `times`, i.e. `len(controls) == len(times) - 1`;
  - the initial time must be zero, i.e. `times[0] == 0`;
- - the time list must be spaced by `0.01` seconds;
+ - the time list must be spaced by `≥0.01` seconds;
  - each steering angle must be admissible, i.e. `-pi/4 <= controls[i] <= pi/4`;
  - the time sequence must increase, i.e. `times[i+1] > times[i]`;
  - the intial heading angle in evaluation is zero, i.e. `theta=0`;
