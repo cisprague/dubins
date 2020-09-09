@@ -22,7 +22,7 @@ def main(solution_function, plot=False, verbose=False):
 
     # test solution function on each configuration
     for obs in obsl:
-        E.append(evaluate(solution, obs, verbose=verbose))
+        E.append(evaluate(solution_function, obs, verbose=verbose))
 
     '''C: line obstacles'''
 
@@ -38,7 +38,7 @@ def main(solution_function, plot=False, verbose=False):
 
     # test solution function on each configuration
     for obs in obsl:
-        C.append(evaluate(solution, obs, verbose=verbose))
+        C.append(evaluate(solution_function, obs, verbose=verbose))
 
     '''E results'''
 
