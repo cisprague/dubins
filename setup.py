@@ -8,7 +8,7 @@ setup(
     version='0.0.1',
     author='Christopher Iliffe Sprague',
     author_email='christopher.iliffe.sprague@gmail.com',
-    package_dir={'dd2410planning' : 'src'},
+    package_dir={'dubins' : 'src'},
     packages=['dubins'],
     url='https://github.com/cisprague/dubins',
     description='Code for the DD2410 planning assignment at KTH.',
