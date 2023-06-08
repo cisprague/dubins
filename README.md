@@ -1,4 +1,4 @@
-# Robotic Planning Assignment 2018
+# Robotic Planning Assignment for [DD2410 Introduction to Robotics](https://www.kth.se/student/kurser/kurs/DD2410?l=en)
 
 - [Installation](doc/install.md)
 - [API](doc/api.md)
